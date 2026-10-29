@@ -7,7 +7,7 @@ A oficina apresenta o Git e o GitHub para estudantes de cursos técnicos e super
 ## 📚 Conteúdo
 
 - **Guia do participante:** conceitos essenciais, vocabulário e colinha de comandos
-- **Slides de exibição** acompanhamento de conceitos da plataforma durante a apresentação
+- **Slides de exibição:** acompanhamento de conceitos da plataforma durante a apresentação
 
 ## 👥 Equipe
 

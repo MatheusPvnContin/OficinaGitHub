@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oficina de GitHub - IFSP Votuporanga</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #1C1B20;
+      --bg-soft: #23222A;
+      --surface: #2A2933;
+      --surface-2: #312F3D;
+      --text: #F5F7FB;
+      --text-soft: #B8BCC8;
+      --line: rgba(255,255,255,0.10);
+
+      --accent: #28C2C4;
+      --accent-2: #B0AFFA;
+      --accent-3: #7BE7E8;
+
+      --success: #6EE7B7;
+      --warning: #F6C177;
+      --danger: #FF7B9C;
+
+      --shadow-soft: 0 10px 30px rgba(0,0,0,0.25);
+      --shadow-glow: 0 0 0 1px rgba(40,194,196,0.16), 0 0 32px rgba(40,194,196,0.12);
+
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 24px;
+      --radius-xl: 28px;
+
+      --fs-display: clamp(56px, 7vw, 96px);
+      --fs-h1: clamp(40px, 5vw, 72px);
+      --fs-h2: clamp(28px, 3.6vw, 48px);
+      --fs-h3: clamp(22px, 2.4vw, 32px);
+      --fs-body-lg: clamp(18px, 1.5vw, 24px);
+      --fs-body: 18px;
+      --fs-small: 14px;
+      --fs-mono: 13px;
+
+      --container-pad-y: 56px;
+      --container-pad-x: 64px;
+      --content-max: 1280px;
+
+      --anim-duration: 0.7s;
+      --anim-ease: ease;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(176,175,250,0.10), transparent 30%),
+        radial-gradient(circle at 80% 30%, rgba(40,194,196,0.10), transparent 28%),
+        linear-gradient(180deg, #1C1B20 0%, #17161B 100%);
+      color: var(--text);
+      font-family: "Chakra Petch", sans-serif;
+      overflow-x: hidden;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .presentation {
+      position: relative;
+    }
+
+    .slide {
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      display: grid;
+      place-items: stretch;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(circle at center, black 45%, transparent 100%);
+      opacity: 0.25;
+      z-index: 0;
+    }
+
+    .slide-inner {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      width: min(100%, calc(var(--content-max) + (var(--container-pad-x) * 2)));
+      margin: 0 auto;
+      padding: var(--container-pad-y) var(--container-pad-x);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 28px;
+    }
+
+    .slide-counter {
+      position: absolute;
+      top: 28px;
+      right: 32px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: var(--fs-mono);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      z-index: 3;
+    }
+
+    .mono {
+      font-family: "JetBrains Mono", monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow {
+      font-size: var(--fs-mono);
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      font-size: var(--fs-body-lg);
+      line-height: 1.4;
+      color: var(--text-soft);
+      margin: 0;
+    }
+
+    h1, h2, h3, p, blockquote, ul, ol {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: var(--fs-display);
+      line-height: 0.94;
+      letter-spacing: -0.03em;
+      max-width: 12ch;
+    }
+
+    h2 {
+      font-size: var(--fs-h2);
+      line-height: 1.04;
+      letter-spacing: -0.025em;
+      max-width: 18ch;
+    }
+
+    h3 {
+      font-size: var(--fs-h3);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    p, li {
+      font-size: var(--fs-body);
+      line-height: 1.45;
+      color: var(--text-soft);
+    }
+
+    .accent-text {
+      color: var(--accent);
+      text-shadow: 0 0 24px rgba(40,194,196,0.18);
+    }
+
+    .accent-2-text {
+      color: var(--accent-2);
+    }
+
+    .section-heading {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 820px;
+    }
+
+    .section-heading.compact {
+      gap: 6px;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 980px;
+    }
+
+    .hero-badge {
+      align-self: flex-start;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(40,194,196,0.25);
+      background: rgba(40,194,196,0.08);
+      box-shadow: var(--shadow-glow);
+      color: var(--text);
+      font-size: var(--fs-mono);
+      font-family: "JetBrains Mono", monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .card-grid,
+    .feature-grid,
+    .stats-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card,
+    .feature-card,
+    .stat-card,
+    .comparison-col,
+    .faq-item {
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(8px);
+    }
+
+    .card,
+    .feature-card,
+    .faq-item {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card-label,
+    .feature-tag,
+    .stat-label {
+      font-family: "JetBrains Mono", monospace;
+      font-size: var(--fs-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .comparison-col {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-height: 340px;
+    }
+
+    .comparison-col.accent {
+      border-color: rgba(40,194,196,0.3);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .comparison-col.muted {
+      opacity: 0.9;
+    }
+
+    .comparison-col ul,
+    .faq-list,
+    .steps-list {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .comparison-col li + li,
+    .faq-item + .faq-item {
+      margin-top: 12px;
+    }
+
+    .statement {
+      max-width: 14ch;
+      font-size: clamp(36px, 5vw, 72px);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    .quote-meta {
+      color: var(--text-soft);
+      margin-top: 12px;
+    }
+
+    .tree {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: 900px;
+    }
+
+    .tree-node {
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      box-shadow: var(--shadow-soft);
+      width: fit-content;
+    }
+
+    .tree-node.root {
+      border-color: rgba(40,194,196,0.3);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .tree-children {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      padding-left: 24px;
+    }
+
+    .tree-branch {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .tree-note {
+      color: var(--text-soft);
+      font-size: var(--fs-mono);
+    }
+
+    .diagram {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .diagram-node {
+      padding: 22px;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+
+    .diagram-node:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -14px;
+      width: 28px;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(40,194,196,0.3), rgba(176,175,250,0.3));
+    }
+
+    .stat-block {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      justify-content: center;
+      min-height: 60vh;
+    }
+
+    .stat-value {
+      font-size: clamp(72px, 11vw, 180px);
+      line-height: 0.9;
+      letter-spacing: -0.05em;
+      color: var(--text);
+      text-shadow: 0 0 28px rgba(40,194,196,0.08);
+    }
+
+    .stats-grid .stat-card {
+      padding: 28px 24px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 18px;
+      align-items: start;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .step-num {
+      color: var(--accent);
+      font-size: clamp(18px, 2vw, 24px);
+      padding-top: 6px;
+    }
+
+    .step-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 740px;
+    }
+
+    .screenshot-frame {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .screenshot-frame img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .screenshot-caption {
+      margin-top: 16px;
+      color: var(--text-soft);
+      font-size: var(--fs-mono);
+    }
+
+    .closing-content,
+    .divider-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 900px;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 20px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 16px;
+      font-weight: 600;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+      color: #081012;
+      box-shadow: var(--shadow-glow);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.03);
+      border-color: rgba(255,255,255,0.12);
+      color: var(--text);
+    }
+
+    .timeline {
+      display: grid;
+      gap: 18px;
+      max-width: 900px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .timeline-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 0 6px rgba(40,194,196,0.08);
+      margin-top: 8px;
+    }
+
+    .timeline-copy {
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .faq-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .animate {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity var(--anim-duration) var(--anim-ease),
+        transform var(--anim-duration) var(--anim-ease);
+      will-change: opacity, transform;
+    }
+
+    .animate.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delay-1 { transition-delay: 80ms; }
+    .delay-2 { transition-delay: 160ms; }
+    .delay-3 { transition-delay: 240ms; }
+    .delay-4 { transition-delay: 320ms; }
+    .delay-5 { transition-delay: 400ms; }
+
+    .dot-nav {
+      position: fixed;
+      top: 50%;
+      right: 18px;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 100;
+    }
+
+    .dot-nav button {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      border: none;
+      padding: 0;
+      background: rgba(255,255,255,0.22);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .dot-nav button.active {
+      background: var(--accent);
+      box-shadow: 0 0 0 6px rgba(40,194,196,0.12);
+      transform: scale(1.12);
+    }
+
+    .dot-nav button:hover {
+      transform: scale(1.08);
+    }
+
+    @media (max-width: 1100px) {
+      :root {
+        --container-pad-y: 44px;
+        --container-pad-x: 36px;
+      }
+
+      .cols-3,
+      .cols-4,
+      .diagram,
+      .faq-list,
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .diagram-node:not(:last-child)::after {
+        top: auto;
+        right: auto;
+        bottom: -10px;
+        left: 50%;
+        width: 1px;
+        height: 20px;
+        transform: translateX(-50%);
+      }
+    }
+
+    @media (max-width: 720px) {
+      :root {
+        --container-pad-y: 28px;
+        --container-pad-x: 20px;
+        --fs-body: 16px;
+        --fs-small: 13px;
+      }
+
+      .slide-counter {
+        top: 16px;
+        right: 20px;
+      }
+
+      .dot-nav {
+        right: 10px;
+      }
+
+      .step {
+        grid-template-columns: 56px 1fr;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .cta-row {
+        flex-direction: column;
+      }
+    }
+
+    code{font-family:"JetBrains Mono",monospace;font-size:.86em;color:var(--accent-3);background:rgba(40,194,196,.09);padding:2px 8px;border-radius:8px}
+    .section-heading h2{max-width:26ch}
+    .divider-slide h2{font-size:var(--fs-h1);max-width:16ch}
+    .term{border-radius:var(--radius-lg);background:#16151a;border:1px solid rgba(40,194,196,.22);box-shadow:var(--shadow-glow);overflow:hidden;max-width:980px}
+    .term-bar{display:flex;align-items:center;gap:8px;padding:12px 18px;border-bottom:1px solid var(--line);color:var(--text-soft);font-size:12px}
+    .term-bar i{width:10px;height:10px;border-radius:99px;background:rgba(255,255,255,.18)}
+    .term-bar span{margin-left:10px}
+    .term pre{margin:0;padding:22px 26px;font-family:"JetBrains Mono",monospace;font-size:clamp(12px,2.1vh,18px);line-height:1.6;color:var(--text);white-space:pre;overflow:hidden}
+    .term .c{color:#7d8294}.term .k{color:var(--accent)}.term .h{color:var(--accent-2)}
+    .slide-note{max-width:900px;font-size:var(--fs-body)}
+    .diagram-node h3{font-size:clamp(20px,2vw,28px)}
+    .dot-nav{gap:6px}.dot-nav button{width:9px;height:9px}
+    .comparison-col li{color:var(--text)}.comparison-col.muted li{color:var(--text-soft)}
+    @media (max-height:820px){
+      :root{--container-pad-y:30px;--fs-h2:clamp(26px,3.2vw,40px);--fs-h3:clamp(19px,2vw,26px);--fs-body:16px}
+      .slide-inner{gap:16px}.step{padding:10px 0}.card,.feature-card,.faq-item{padding:16px;gap:8px}
+      .comparison-col{min-height:0;padding:20px;gap:12px}.stat-block{min-height:0}
+    }
+  </style>
+</head>
+<body>
+  <nav class="dot-nav" aria-label="Slide navigation"></nav>
+
+  <main class="presentation">
+<section class="slide title-slide"><div class="slide-inner"><div class="slide-counter">01 / 36</div><div class="hero"><div class="hero-badge animate delay-1">OFICINA PRÁTICA</div><div class="eyebrow mono animate delay-2">IFSP VOTUPORANGA</div><h1 class="animate delay-3">Do primeiro commit ao seu <span class="accent-text">portfólio</span></h1><p class="subtitle animate delay-4">GitHub do zero: conta, Git, comandos, README e perfil.</p></div></div></section>
+<section class="slide grid-slide"><div class="slide-inner"><div class="slide-counter">02 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">ROTEIRO</div><h2 class="animate delay-2">O que vamos fazer hoje</h2></div><div class="card-grid cols-3"><article class="card animate delay-1"><div class="card-label">01</div><h3>Preparar o ambiente</h3><p>Criar conta no GitHub e instalar o Git.</p></article><article class="card animate delay-2"><div class="card-label">02</div><h3>Tour pela plataforma</h3><p>Conhecer um repositório e criar o seu.</p></article><article class="card animate delay-3"><div class="card-label">03</div><h3>Comandos básicos</h3><p>Subir o primeiro projeto para o GitHub.</p></article><article class="card animate delay-4"><div class="card-label">04</div><h3>Desfazer erros</h3><p>Rollback, clone e atualização de projetos.</p></article><article class="card animate delay-5"><div class="card-label">05</div><h3>README e perfil</h3><p>Cartão de visita do projeto e o seu.</p></article><article class="card animate delay-5"><div class="card-label">06</div><h3>Desafio final</h3><p>Tudo no ar e link compartilhado.</p></article></div></div></section>
+<section class="slide quote-slide"><div class="slide-inner"><div class="slide-counter">03 / 36</div><blockquote class="statement animate delay-1">Git é o <span class="accent-text">motor</span>. GitHub é a garagem.</blockquote><div class="quote-meta mono animate delay-2">Analogia da oficina</div></div></section>
+<section class="slide comparison-slide"><div class="slide-inner"><div class="slide-counter">04 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">CONCEITO</div><h2 class="animate delay-2"><span class="accent-text">Git</span> ou <span class="accent-text">GitHub</span>?</h2></div><div class="comparison-grid"><div class="comparison-col muted animate delay-1"><h3>Git</h3><ul><li>Controle de versão</li><li>Roda no seu computador</li><li>Funciona sem internet</li><li>Guarda o histórico do projeto</li></ul></div><div class="comparison-col accent animate delay-2"><h3>GitHub</h3><ul><li>Plataforma online</li><li>Hospeda repositórios Git</li><li>Rede social de desenvolvedores</li><li>Portfólio e trabalho em equipe</li></ul></div></div></div></section>
+<section class="slide grid-slide"><div class="slide-inner"><div class="slide-counter">05 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">POR QUE IMPORTA</div><h2 class="animate delay-2">Por que isso importa em <span class="accent-text">TI</span></h2></div><div class="card-grid cols-4"><article class="card animate delay-1"><div class="card-label">PORTFÓLIO</div><h3>Currículo vivo</h3><p>Recrutadores olham o seu GitHub.</p></article><article class="card animate delay-2"><div class="card-label">EQUIPE</div><h3>Trabalho colaborativo</h3><p>Várias pessoas, um mesmo código.</p></article><article class="card animate delay-3"><div class="card-label">BACKUP</div><h3>Histórico completo</h3><p>Nada de trabalho_final_v2.zip.</p></article><article class="card animate delay-4"><div class="card-label">MERCADO</div><h3>Exigência de vagas</h3><p>Quase toda vaga de TI pede Git.</p></article></div></div></section>
+<section class="slide divider-slide"><div class="slide-inner"><div class="slide-counter">06 / 36</div><div class="divider-content"><div class="eyebrow mono animate delay-1">PARTE 01</div><h2 class="animate delay-2">Preparando o <span class="accent-text">ambiente</span></h2><p class="subtitle animate delay-3">Conta no GitHub e Git instalado.</p></div></div></section>
+<section class="slide steps-slide"><div class="slide-inner"><div class="slide-counter">07 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">PASSO A PASSO</div><h2 class="animate delay-2">Criar sua conta no <span class="accent-text">GitHub</span></h2></div><ol class="steps-list"><li class="step animate delay-1"><div class="step-num mono">01</div><div class="step-copy"><h3>Acesse github.com</h3><p>Clique em Sign up, no canto superior direito.</p></div></li><li class="step animate delay-2"><div class="step-num mono">02</div><div class="step-copy"><h3>Informe e-mail e senha</h3><p>Use um e-mail que você realmente acessa.</p></div></li><li class="step animate delay-3"><div class="step-num mono">03</div><div class="step-copy"><h3>Escolha o usuário</h3><p>Profissional: ele aparece no currículo e no link.</p></div></li><li class="step animate delay-4"><div class="step-num mono">04</div><div class="step-copy"><h3>Verifique a conta</h3><p>Resolva o desafio e digite o código do e-mail.</p></div></li><li class="step animate delay-5"><div class="step-num mono">05</div><div class="step-copy"><h3>Confirme o e-mail</h3><p>Abra o link de confirmação enviado pelo GitHub.</p></div></li></ol></div></section>
+<section class="slide grid-slide"><div class="slide-inner"><div class="slide-counter">08 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">INSTALAÇÃO</div><h2 class="animate delay-2">Instalar o <span class="accent-text">Git</span></h2></div><div class="card-grid cols-3"><article class="card animate delay-1"><div class="card-label">WINDOWS</div><h3>git-scm.com</h3><p>Baixe o instalador e avance com as opções padrão.</p></article><article class="card animate delay-2"><div class="card-label">LINUX</div><h3>sudo apt install git</h3><p>Em Ubuntu e Debian. Outras distros usam o gerenciador próprio.</p></article><article class="card animate delay-3"><div class="card-label">MACOS</div><h3>brew install git</h3><p>Ou rode git --version e aceite instalar as ferramentas.</p></article></div><p class="slide-note animate delay-4">Conferir a instalação: abra o terminal e rode <code>git --version</code>.</p></div></section>
+<section class="slide code-slide"><div class="slide-inner"><div class="slide-counter">09 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">CONFIGURAÇÃO</div><h2 class="animate delay-2">Configurar o Git <span class="accent-text">uma vez</span></h2></div><div class="term animate delay-3"><div class="term-bar mono"><i></i><i></i><i></i><span>terminal</span></div><pre><span class="k">git</span> --version
+<span class="k">git</span> config --global user.name &quot;Seu Nome&quot;
+<span class="k">git</span> config --global user.email &quot;seu@email.com&quot;</pre></div><p class="slide-note animate delay-4">Use o mesmo e-mail da conta do GitHub, ou seus commits não aparecem no perfil.</p></div></section>
+<section class="slide grid-slide"><div class="slide-inner"><div class="slide-counter">10 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">ATENÇÃO</div><h2 class="animate delay-2">Como <span class="accent-text">autenticar</span> no push</h2></div><div class="card-grid cols-3"><article class="card animate delay-1"><div class="card-label">RECOMENDADO</div><h3>Git Credential Manager</h3><p>Vem com o Git no Windows e abre o navegador.</p></article><article class="card animate delay-2"><div class="card-label">ALTERNATIVA</div><h3>GitHub CLI</h3><p>Rode <code>gh auth login</code> e siga as instruções.</p></article><article class="card animate delay-3"><div class="card-label">AVANÇADO</div><h3>Personal Access Token</h3><p>Token usado no lugar da senha.</p></article></div><p class="slide-note animate delay-4">A senha da conta <span class="accent-text">não funciona mais</span> no terminal.</p></div></section>
+<section class="slide divider-slide"><div class="slide-inner"><div class="slide-counter">11 / 36</div><div class="divider-content"><div class="eyebrow mono animate delay-1">PARTE 02</div><h2 class="animate delay-2">Tour pela <span class="accent-text">plataforma</span></h2><p class="subtitle animate delay-3">Conhecendo e criando repositórios.</p></div></div></section>
+<section class="slide grid-slide"><div class="slide-inner"><div class="slide-counter">12 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">ANATOMIA</div><h2 class="animate delay-2">Por dentro de um <span class="accent-text">repositório</span></h2></div><div class="card-grid cols-3"><article class="card animate delay-1"><div class="card-label">ABA</div><h3>Code</h3><p>Arquivos, histórico e o README renderizado.</p></article><article class="card animate delay-2"><div class="card-label">ABA</div><h3>Issues</h3><p>Tarefas, bugs e discussões do projeto.</p></article><article class="card animate delay-3"><div class="card-label">ABA</div><h3>Pull requests</h3><p>Propostas de mudança para revisão.</p></article><article class="card animate delay-4"><div class="card-label">ABA</div><h3>Actions</h3><p>Automações como testes e deploy.</p></article><article class="card animate delay-5"><div class="card-label">ABA</div><h3>Settings</h3><p>Visibilidade, acessos e exclusão.</p></article><article class="card animate delay-5"><div class="card-label">BOTÃO</div><h3>Code (verde)</h3><p>Copia a URL HTTPS para clonar.</p></article></div></div></section>
+<section class="slide steps-slide"><div class="slide-inner"><div class="slide-counter">13 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">PRÁTICA</div><h2 class="animate delay-2">Criar o primeiro <span class="accent-text">repositório</span></h2></div><ol class="steps-list"><li class="step animate delay-1"><div class="step-num mono">01</div><div class="step-copy"><h3>Clique em New repository</h3><p>Botão verde na página inicial ou no menu +.</p></div></li><li class="step animate delay-2"><div class="step-num mono">02</div><div class="step-copy"><h3>Dê nome e descrição</h3><p>Nomes curtos, sem espaços e sem acentos.</p></div></li><li class="step animate delay-3"><div class="step-num mono">03</div><div class="step-copy"><h3>Escolha Public</h3><p>Público para aparecer no portfólio.</p></div></li><li class="step animate delay-4"><div class="step-num mono">04</div><div class="step-copy"><h3>Não marque Add a README</h3><p>Evita conflito no primeiro push.</p></div></li><li class="step animate delay-5"><div class="step-num mono">05</div><div class="step-copy"><h3>Clique em Create repository</h3><p>Copie a URL HTTPS que aparece na tela.</p></div></li></ol></div></section>
+<section class="slide diagram-slide"><div class="slide-inner"><div class="slide-counter">14 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">FLUXO DO GIT</div><h2 class="animate delay-2">O caminho de um <span class="accent-text">arquivo</span></h2></div><div class="diagram"><div class="diagram-node animate delay-1"><div class="card-label">PASSO 1</div><h3>Pasta do projeto</h3><p>Você edita os arquivos.</p></div><div class="diagram-node animate delay-2"><div class="card-label">git add</div><h3>Staging</h3><p>Escolhe o que entra na foto.</p></div><div class="diagram-node animate delay-3"><div class="card-label">git commit</div><h3>Repositório local</h3><p>Tira a foto e guarda o histórico.</p></div><div class="diagram-node animate delay-4"><div class="card-label">git push</div><h3>GitHub</h3><p>Envia o projeto para a nuvem.</p></div></div><p class="slide-note animate delay-5">Se entenderem esse fluxo, o resto fica fácil.</p></div></section>
+<section class="slide divider-slide"><div class="slide-inner"><div class="slide-counter">15 / 36</div><div class="divider-content"><div class="eyebrow mono animate delay-1">PARTE 03</div><h2 class="animate delay-2">Comandos <span class="accent-text">básicos</span></h2><p class="subtitle animate delay-3">Subindo o primeiro projeto.</p></div></div></section>
+<section class="slide code-slide"><div class="slide-inner"><div class="slide-counter">16 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">FLUXO PRINCIPAL</div><h2 class="animate delay-2">Do zero ao <span class="accent-text">GitHub</span></h2></div><div class="term animate delay-3"><div class="term-bar mono"><i></i><i></i><i></i><span>terminal</span></div><pre><span class="k">cd</span> minha-pasta-do-projeto
+<span class="k">git</span> init                      <span class="c"># transforma a pasta em repositório</span>
+<span class="k">git</span> status                    <span class="c"># o que mudou? use sempre</span>
+<span class="k">git</span> add .                     <span class="c"># prepara as mudanças</span>
+<span class="k">git</span> commit -m &quot;Primeiro commit&quot;   <span class="c"># tira a foto do projeto</span>
+<span class="k">git</span> branch -M main            <span class="c"># nomeia a branch como main</span>
+<span class="k">git</span> remote add origin https://github.com/USUARIO/REPO.git
+<span class="k">git</span> push -u origin main       <span class="c"># envia para o GitHub</span></pre></div></div></section>
+<section class="slide code-slide"><div class="slide-inner"><div class="slide-counter">17 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">COMPLEMENTARES</div><h2 class="animate delay-2">Comandos do <span class="accent-text">dia a dia</span></h2></div><div class="term animate delay-3"><div class="term-bar mono"><i></i><i></i><i></i><span>terminal</span></div><pre><span class="k">git</span> status            <span class="c"># situação atual do projeto</span>
+<span class="k">git</span> diff              <span class="c"># o que mudou, linha a linha</span>
+<span class="k">git</span> log --oneline     <span class="c"># histórico resumido</span>
+<span class="k">git</span> pull              <span class="c"># traz novidades do GitHub</span>
+<span class="k">git</span> clone URL         <span class="c"># baixa um repositório existente</span></pre></div><p class="slide-note animate delay-4">Pare após o <code>git commit</code> e confirme que todos chegaram lá.</p></div></section>
+<section class="slide grid-slide"><div class="slide-inner"><div class="slide-counter">18 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">ATENÇÃO</div><h2 class="animate delay-2">Erros <span class="accent-text">comuns</span></h2></div><div class="card-grid cols-3"><article class="card animate delay-1"><div class="card-label">ERRO 1</div><h3>Esqueceu o git add</h3><p>O commit sai vazio ou incompleto.</p></article><article class="card animate delay-2"><div class="card-label">ERRO 2</div><h3>Pasta errada</h3><p>Rode os comandos dentro da pasta do projeto.</p></article><article class="card animate delay-3"><div class="card-label">ERRO 3</div><h3>Push sem permissão</h3><p>Revise o login e a URL do remote.</p></article><article class="card animate delay-4"><div class="card-label">ERRO 4</div><h3>README criado no site</h3><p>Históricos diferentes. Resolva com git pull.</p></article><article class="card animate delay-5"><div class="card-label">ERRO 5</div><h3>E-mail diferente</h3><p>Commits não aparecem no gráfico do perfil.</p></article></div></div></section>
+<section class="slide divider-slide"><div class="slide-inner"><div class="slide-counter">19 / 36</div><div class="divider-content"><div class="eyebrow mono animate delay-1">PARTE 04</div><h2 class="animate delay-2">Desfazendo <span class="accent-text">erros</span></h2><p class="subtitle animate delay-3">Rollback, clone e atualização.</p></div></div></section>
+<section class="slide comparison-slide"><div class="slide-inner"><div class="slide-counter">20 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">ROLLBACK</div><h2 class="animate delay-2">Commit errado: <span class="accent-text">depende</span></h2></div><div class="comparison-grid"><div class="comparison-col muted animate delay-1"><h3>Ainda só local</h3><ul><li><code>git commit --amend</code></li><li>Corrige a mensagem do último commit</li><li><code>git reset --soft HEAD~1</code></li><li>Desfaz o commit e mantém as mudanças</li></ul></div><div class="comparison-col accent animate delay-2"><h3>Já deu push</h3><ul><li><code>git revert abc1234</code></li><li>Cria um novo commit que desfaz</li><li><code>git push</code> para publicar</li><li>Não reescreve o histórico publicado</li></ul></div></div></div></section>
+<section class="slide grid-slide"><div class="slide-inner"><div class="slide-counter">21 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">GIT RESET</div><h2 class="animate delay-2">Os três jeitos de <span class="accent-text">reset</span></h2></div><div class="card-grid cols-3"><article class="card animate delay-1"><div class="card-label">SEGURO</div><h3>--soft</h3><p>Desfaz o commit. Mudanças ficam no staging.</p></article><article class="card animate delay-2"><div class="card-label">PADRÃO</div><h3>(sem opção)</h3><p>Desfaz o commit. Mudanças ficam nos arquivos.</p></article><article class="card animate delay-3"><div class="card-label">PERIGOSO</div><h3>--hard</h3><p>Desfaz o commit e apaga as mudanças.</p></article></div><p class="slide-note animate delay-4"><code>HEAD~1</code> significa um commit antes do atual.</p></div></section>
+<section class="slide code-slide"><div class="slide-inner"><div class="slide-counter">22 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">SOCORRO</div><h2 class="animate delay-2">Descartar e <span class="accent-text">recuperar</span></h2></div><div class="term animate delay-3"><div class="term-bar mono"><i></i><i></i><i></i><span>terminal</span></div><pre><span class="k">git</span> restore arquivo.txt            <span class="c"># descarta mudanças no arquivo</span>
+<span class="k">git</span> restore --staged arquivo.txt   <span class="c"># tira do staging</span>
+<span class="k">git</span> reflog                         <span class="c"># tudo o que o Git fez</span>
+<span class="k">git</span> reset --hard HASH              <span class="c"># volta para um ponto do reflog</span></pre></div><p class="slide-note animate delay-4">Subiu senha ou chave? <span class="accent-text">Revogue a chave primeiro</span>: apagar o arquivo não basta.</p></div></section>
+<section class="slide steps-slide"><div class="slide-inner"><div class="slide-counter">23 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">CLONE</div><h2 class="animate delay-2">Baixar e atualizar um <span class="accent-text">projeto</span></h2></div><ol class="steps-list"><li class="step animate delay-1"><div class="step-num mono">01</div><div class="step-copy"><h3>Clone o repositório</h3><p><code>git clone URL</code> baixa tudo e já conecta ao GitHub.</p></div></li><li class="step animate delay-2"><div class="step-num mono">02</div><div class="step-copy"><h3>Entre na pasta</h3><p><code>cd nome-do-projeto</code></p></div></li><li class="step animate delay-3"><div class="step-num mono">03</div><div class="step-copy"><h3>Edite os arquivos</h3><p>Use o VS Code ou qualquer editor.</p></div></li><li class="step animate delay-4"><div class="step-num mono">04</div><div class="step-copy"><h3>Add, commit e push</h3><p><code>git add .</code> depois <code>git commit</code> e <code>git push</code>.</p></div></li><li class="step animate delay-5"><div class="step-num mono">05</div><div class="step-copy"><h3>Traga novidades</h3><p><code>git pull</code> antes de começar a trabalhar.</p></div></li></ol></div></section>
+<section class="slide comparison-slide"><div class="slide-inner"><div class="slide-counter">24 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">COLABORAÇÃO</div><h2 class="animate delay-2">Projeto seu ou de <span class="accent-text">outra pessoa</span>?</h2></div><div class="comparison-grid"><div class="comparison-col muted animate delay-1"><h3>O projeto é seu</h3><ul><li>Use <code>git clone</code> direto</li><li>Edite, commit e <code>git push</code></li><li>Sem <code>git init</code> nem <code>remote add</code></li></ul></div><div class="comparison-col accent animate delay-2"><h3>É de outra pessoa</h3><ul><li>Clique em Fork no GitHub</li><li>Clone o seu fork</li><li>Crie uma branch e faça push</li><li>Abra um Pull Request</li></ul></div></div></div></section>
+<section class="slide divider-slide"><div class="slide-inner"><div class="slide-counter">25 / 36</div><div class="divider-content"><div class="eyebrow mono animate delay-1">PARTE 05</div><h2 class="animate delay-2">README e <span class="accent-text">perfil</span></h2><p class="subtitle animate delay-3">O cartão de visita do projeto e o seu.</p></div></div></section>
+<section class="slide grid-slide"><div class="slide-inner"><div class="slide-counter">26 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">README</div><h2 class="animate delay-2">O que um bom README <span class="accent-text">tem</span></h2></div><div class="card-grid cols-3"><article class="card animate delay-1"><div class="card-label">01</div><h3>Título e descrição</h3><p>Em uma ou duas frases.</p></article><article class="card animate delay-2"><div class="card-label">02</div><h3>Tecnologias usadas</h3><p>Linguagens, bibliotecas e ferramentas.</p></article><article class="card animate delay-3"><div class="card-label">03</div><h3>Como executar</h3><p>Passo a passo para rodar o projeto.</p></article><article class="card animate delay-4"><div class="card-label">04</div><h3>Prints ou GIF</h3><p>Mostra o resultado sem precisar rodar.</p></article><article class="card animate delay-5"><div class="card-label">05</div><h3>Autor e contato</h3><p>Seu nome, GitHub e LinkedIn.</p></article><article class="card animate delay-5"><div class="card-label">06</div><h3>Licença</h3><p>Define como outras pessoas podem usar.</p></article></div></div></section>
+<section class="slide code-slide"><div class="slide-inner"><div class="slide-counter">27 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">MARKDOWN</div><h2 class="animate delay-2">Markdown em <span class="accent-text">poucas linhas</span></h2></div><div class="term animate delay-3"><div class="term-bar mono"><i></i><i></i><i></i><span>README.md</span></div><pre><span class="h"># Título</span>
+<span class="h">## Subtítulo</span>
+**negrito**  e  *itálico*
+- item de lista
+1. item numerado
+[texto do link](https://github.com)
+![descrição da imagem](print.png)
+`código em linha`</pre></div><p class="slide-note animate delay-4">No VS Code, veja o resultado com <code>Ctrl+Shift+V</code>.</p></div></section>
+<section class="slide code-slide"><div class="slide-inner"><div class="slide-counter">28 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">MODELO</div><h2 class="animate delay-2">README de <span class="accent-text">projeto</span></h2></div><div class="term animate delay-3"><div class="term-bar mono"><i></i><i></i><i></i><span>README.md</span></div><pre><span class="h"># Nome do Projeto</span>
+
+Descrição curta do que o projeto faz.
+
+<span class="h">## Tecnologias</span>
+- HTML
+- CSS
+- JavaScript
+
+<span class="h">## Como executar</span>
+1. Clone o repositório
+2. Abra o index.html no navegador
+
+<span class="h">## Autor</span>
+**Seu Nome** - [GitHub](https://github.com/usuario)</pre></div></div></section>
+<section class="slide steps-slide"><div class="slide-inner"><div class="slide-counter">29 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">PERFIL</div><h2 class="animate delay-2">README de <span class="accent-text">perfil</span>: o passo a passo</h2></div><ol class="steps-list"><li class="step animate delay-1"><div class="step-num mono">01</div><div class="step-copy"><h3>New repository</h3><p>Clique no botão verde para criar um novo.</p></div></li><li class="step animate delay-2"><div class="step-num mono">02</div><div class="step-copy"><h3>Nome igual ao usuário</h3><p>Exemplo: usuário mariasilva, repositório mariasilva.</p></div></li><li class="step animate delay-3"><div class="step-num mono">03</div><div class="step-copy"><h3>Marque Public</h3><p>E marque também Add a README file.</p></div></li><li class="step animate delay-4"><div class="step-num mono">04</div><div class="step-copy"><h3>Create repository</h3><p>O GitHub confirma com o aviso Special repository.</p></div></li><li class="step animate delay-5"><div class="step-num mono">05</div><div class="step-copy"><h3>Edite e faça commit</h3><p>Lápis, escreva e Commit changes. Veja no perfil.</p></div></li></ol></div></section>
+<section class="slide code-slide"><div class="slide-inner"><div class="slide-counter">30 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">MODELO</div><h2 class="animate delay-2">README de <span class="accent-text">perfil</span></h2></div><div class="term animate delay-3"><div class="term-bar mono"><i></i><i></i><i></i><span>README.md</span></div><pre><span class="h"># Olá, eu sou o(a) [Seu Nome]</span>
+
+Estudante de [curso] no **IFSP Votuporanga**.
+
+<span class="h">## Sobre mim</span>
+- Interesso-me por [web, dados, redes, jogos...]
+- Estou aprendendo [tecnologia atual]
+- Meu objetivo: [estágio, primeiro emprego...]
+
+<span class="h">## Projetos em destaque</span>
+- [Nome do projeto](link) - descrição curta
+
+<span class="h">## Contato</span>
+- [LinkedIn](https://linkedin.com/in/usuario)</pre></div><p class="slide-note animate delay-4">Sem telefone, endereço ou dados sensíveis. O perfil é público.</p></div></section>
+<section class="slide faq-slide"><div class="slide-inner"><div class="slide-counter">31 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">DÚVIDAS · ENVIO</div><h2 class="animate delay-2">Dúvidas <span class="accent-text">frequentes</span>: envio</h2></div><div class="faq-list"><article class="faq-item animate delay-1"><h3>Push rejeitado: fetch first?</h3><p>Há commits no GitHub que você não tem. Rode <code>git pull</code>, depois <code>git push</code>.</p></article><article class="faq-item animate delay-2"><h3>Abriu um editor estranho no pull?</h3><p>É a mensagem de merge. Salve e feche. No Vim: Esc, <code>:wq</code>, Enter.</p></article><article class="faq-item animate delay-3"><h3>O que é conflito de merge?</h3><p>Duas pessoas mudaram a mesma linha. Escolha a versão, apague os marcadores, commit.</p></article><article class="faq-item animate delay-4"><h3>Commit e push: qual a diferença?</h3><p>Commit salva no seu computador. Push envia para o GitHub.</p></article></div></div></section>
+<section class="slide faq-slide"><div class="slide-inner"><div class="slide-counter">32 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">DÚVIDAS · GIT</div><h2 class="animate delay-2">Dúvidas <span class="accent-text">frequentes</span>: Git</h2></div><div class="faq-list"><article class="faq-item animate delay-1"><h3>Pull ou fetch?</h3><p>Fetch só baixa. Pull é fetch mais merge nos seus arquivos.</p></article><article class="faq-item animate delay-2"><h3>Commitei um arquivo que devia ignorar.</h3><p>Adicione ao <code>.gitignore</code> e rode <code>git rm --cached arquivo</code>.</p></article><article class="faq-item animate delay-3"><h3>Aparece master em vez de main.</h3><p>Sem problema. Use <code>git branch -M main</code> para casar com o GitHub.</p></article><article class="faq-item animate delay-4"><h3>Meus commits não aparecem no perfil.</h3><p>Confira se o e-mail do <code>git config</code> é o da conta.</p></article></div></div></section>
+<section class="slide faq-slide"><div class="slide-inner"><div class="slide-counter">33 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">DÚVIDAS · GERAL</div><h2 class="animate delay-2">Dúvidas <span class="accent-text">frequentes</span>: geral</h2></div><div class="faq-list"><article class="faq-item animate delay-1"><h3>Por que não baixar o ZIP?</h3><p>ZIP não tem histórico nem vínculo. Prefira <code>git clone</code>.</p></article><article class="faq-item animate delay-2"><h3>Apaguei a pasta do projeto!</h3><p>Se estava no GitHub, basta um novo <code>git clone</code>.</p></article><article class="faq-item animate delay-3"><h3>Posso deixar o repositório privado?</h3><p>Sim, em Settings. Lá também dá para excluir o repositório.</p></article><article class="faq-item animate delay-4"><h3>GitHub, GitLab ou Bitbucket?</h3><p>Todos usam Git. O GitHub é o mais usado em portfólios.</p></article></div></div></section>
+<section class="slide steps-slide"><div class="slide-inner"><div class="slide-counter">34 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">HORA DE PRATICAR</div><h2 class="animate delay-2">Desafio <span class="accent-text">final</span></h2></div><ol class="steps-list"><li class="step animate delay-1"><div class="step-num mono">01</div><div class="step-copy"><h3>Projeto no GitHub</h3><p>Repositório público com README: título, descrição e tecnologias.</p></div></li><li class="step animate delay-2"><div class="step-num mono">02</div><div class="step-copy"><h3>README de perfil</h3><p>Criado e visível na página do seu perfil.</p></div></li><li class="step animate delay-3"><div class="step-num mono">03</div><div class="step-copy"><h3>Segundo commit</h3><p>Altere algo e envie com <code>git push</code>.</p></div></li><li class="step animate delay-4"><div class="step-num mono">04</div><div class="step-copy"><h3>Compartilhe o link</h3><p>Envie o link do seu perfil no chat.</p></div></li></ol></div></section>
+<section class="slide grid-slide"><div class="slide-inner"><div class="slide-counter">35 / 36</div><div class="section-heading"><div class="eyebrow mono animate delay-1">PRÓXIMOS PASSOS</div><h2 class="animate delay-2">Para ir <span class="accent-text">além</span></h2></div><div class="card-grid cols-4"><article class="card animate delay-1"><div class="card-label">BRANCHES</div><h3>Branches e merge</h3><p>Trabalhe sem quebrar o código principal.</p></article><article class="card animate delay-2"><div class="card-label">COLABORAÇÃO</div><h3>Pull requests</h3><p>Contribua com projetos de outras pessoas.</p></article><article class="card animate delay-3"><div class="card-label">PUBLICAÇÃO</div><h3>GitHub Pages</h3><p>Publique um site gratuitamente.</p></article><article class="card animate delay-4"><div class="card-label">BENEFÍCIOS</div><h3>Student Developer Pack</h3><p>Ferramentas gratuitas para estudantes.</p></article></div></div></section>
+<section class="slide closing-slide"><div class="slide-inner"><div class="slide-counter">36 / 36</div><div class="closing-content"><div class="eyebrow mono animate delay-1">OBRIGADO</div><h2 class="animate delay-2">Commite todo <span class="accent-text">trabalho</span> de aula</h2><p class="subtitle animate delay-3">Use o GitHub como portfólio e continue praticando.</p><div class="cta-row animate delay-4"><a href="https://github.com" target="_blank" class="btn btn-primary">Abrir github.com</a><a href="https://git-scm.com" target="_blank" class="btn btn-secondary">Baixar o Git</a></div></div></div></section>
+</main>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const dotsContainer = document.querySelector('.dot-nav');
+
+    function scrollToSlide(index) {
+      const clamped = Math.max(0, Math.min(index, slides.length - 1));
+      slides[clamped].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function buildDots() {
+      slides.forEach((slide, index) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.setAttribute('aria-label', `Go to slide ${index + 1}`);
+        btn.addEventListener('click', () => scrollToSlide(index));
+        dotsContainer.appendChild(btn);
+      });
+    }
+
+    function setActiveDot(index) {
+      const dots = dotsContainer.querySelectorAll('button');
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+    }
+
+    const slideObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const index = slides.indexOf(entry.target);
+          setActiveDot(index);
+        }
+      });
+    }, {
+      threshold: 0.6
+    });
+
+    const animationObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          animationObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.2
+    });
+
+    function initObservers() {
+      slides.forEach(slide => slideObserver.observe(slide));
+      document.querySelectorAll('.animate').forEach(el => animationObserver.observe(el));
+    }
+
+    function getCurrentSlideIndex() {
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+
+      slides.forEach((slide, index) => {
+        const rect = slide.getBoundingClientRect();
+        const distance = Math.abs(rect.top);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      return closestIndex;
+    }
+
+    document.addEventListener('keydown', (event) => {
+      const currentIndex = getCurrentSlideIndex();
+
+      if (event.key === 'ArrowDown' || event.key === 'ArrowRight' || event.key === 'PageDown') {
+        event.preventDefault();
+        scrollToSlide(currentIndex + 1);
+      }
+
+      if (event.key === 'ArrowUp' || event.key === 'ArrowLeft' || event.key === 'PageUp') {
+        event.preventDefault();
+        scrollToSlide(currentIndex - 1);
+      }
+
+      if (event.key === 'Home') {
+        event.preventDefault();
+        scrollToSlide(0);
+      }
+
+      if (event.key === 'End') {
+        event.preventDefault();
+        scrollToSlide(slides.length - 1);
+      }
+    });
+
+    buildDots();
+    initObservers();
+    setActiveDot(0);
+  </script>
+</body>
+</html>
